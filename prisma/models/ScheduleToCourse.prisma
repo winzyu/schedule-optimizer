@@ -1,0 +1,11 @@
+// Join table
+model ScheduleToCourse {
+  // References to the related models
+  schedule    Schedule @relation(fields: [scheduleId], references: [id])
+  scheduleId  String
+  course      Course   @relation(fields: [courseId], references: [id])
+  courseId    String
+
+  // composite primary key
+  @@id([scheduleId, courseId])
+}

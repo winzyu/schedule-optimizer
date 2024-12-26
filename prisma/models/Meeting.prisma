@@ -1,0 +1,11 @@
+model Meeting {
+  id          String   @id @default(uuid())
+  time        String
+  days        String
+  type        String
+  location    String
+
+  // Relationship to Course
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+}

@@ -1,0 +1,23 @@
+model Course {
+  id            String     @id @default(uuid())
+  crn           String
+  subjectCode   String
+  courseNumber  String
+  sectionCode   String
+  title         String
+  units         Int
+  instructor    String
+  description   String?
+  geCourses     String[]
+  finalExam     DateTime?
+  dropDate      String?
+  
+  // Optional, hardest to keep track of
+  openSeats     Int?       @default(0)
+  reservedSeats Int?       @default(0)
+  waitlistSeats Int?       @default(0)
+  
+  // Relationships
+  meetings      Meeting[]
+  schedules     ScheduleToCourse[]
+}
