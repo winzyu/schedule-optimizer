@@ -1,16 +1,21 @@
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
-import { NextRequest } from 'next/server';
-
-import typeDefs from './_typeDefs/index';
-import resolvers from './_resolvers/index';
+import { getUser } from './_middleware/auth.js';
+import typeDefs from './_typeDefs/index.js';
+import resolvers from './_resolvers/index.js';
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: process.env.NODE_ENV !== 'production',
-}) as ApolloServer<object>;
+  includeStacktraceInErrorResponses: process.env.NODE_ENV === 'development',
+  formatError: (error) => {
+    console.error('GraphQL Error:', error);
+    return error;
+  },
+});
 
-const handler = startServerAndCreateNextHandler<NextRequest>(server);
-
-export default handler;
+export default startServerAndCreateNextHandler(server, {
+  context: async (req) => ({
+    user: await getUser(req),
+  }),
+});

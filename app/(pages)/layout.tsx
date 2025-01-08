@@ -1,24 +1,22 @@
-import '@globals/globals.scss';
-import fonts from '@globals/fonts';
-import metadata from '@globals/metadata.json';
+'use client';
 
-import navLinks from '@data/navLinks.json';
-import Navbar from '@components/Navbar/Navbar';
-import Footer from './_components/Footer/Footer';
-
-export { metadata };
+import { ApolloProvider } from '@apollo/client';
+import { client } from './_utils/apollo-client';
+import './_globals/globals.scss';
 
 export default function RootLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={fonts}>
-        <Navbar navLinks={navLinks} />
-        {children}
-        <Footer navLinks={navLinks} />
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className="min-h-screen">
+        <ApolloProvider client={client}>{children}</ApolloProvider>
       </body>
     </html>
   );

@@ -43,32 +43,15 @@ model Meeting {
   course   Course @relation(fields: [courseId], references: [id])
 }
 
-model Playlist {
-  id        String           @id @default(uuid())
-  name      String
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  songs     PlaylistToSong[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-}
-
-model PlaylistToSong {
-  playlistId String
-  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  songId     String
-  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@id(name: "id", fields: [playlistId, songId])
-}
-
 model Schedule {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relationship with user
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Many-to-many relationship with courses
   courses ScheduleToCourse[]
@@ -86,18 +69,14 @@ model ScheduleToCourse {
   @@id([scheduleId, courseId])
 }
 
-model Song {
-  id        String           @id @default(uuid())
-  name      String
-  playlists PlaylistToSong[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-}
-
 model User {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
+  email     String   @unique
   name      String
-  playlists Playlist[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  password  String // In practice, this should be hashed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationship with schedules
+  schedules Schedule[]
 }

@@ -4,6 +4,10 @@ model Schedule {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  // Relationship with user
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // Many-to-many relationship with courses
   courses     ScheduleToCourse[]
 }

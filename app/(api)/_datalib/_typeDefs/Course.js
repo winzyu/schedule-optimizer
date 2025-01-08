@@ -1,7 +1,6 @@
-// app/(api)/_datalib/_typeDefs/Course.js
 import gql from 'graphql-tag';
 
-export default gql`
+const typeDefs = gql`
   type Course {
     id: ID!
     crn: String!
@@ -19,22 +18,7 @@ export default gql`
     reservedSeats: Int!
     waitlistSeats: Int!
     meetings: [Meeting!]!
-  }
-
-  type Meeting {
-    id: ID!
-    time: String!
-    days: String!
-    type: String!
-    location: String!
-  }
-
-  type Schedule {
-    id: ID!
-    name: String!
-    courses: [Course!]!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    schedules: [Schedule!]!
   }
 
   input CourseSearchInput {
@@ -42,15 +26,10 @@ export default gql`
     courseNumber: String!
   }
 
-  extend type Query {
+  type Query {
+    course(id: ID!): Course
     courses(search: CourseSearchInput!): [Course!]!
-    schedule(id: ID!): Schedule
-    schedules: [Schedule!]!
-  }
-
-  extend type Mutation {
-    createSchedule(name: String!): Schedule!
-    addCourseToSchedule(scheduleId: ID!, courseId: ID!): Schedule!
-    removeCourseFromSchedule(scheduleId: ID!, courseId: ID!): Schedule!
   }
 `;
+
+export default typeDefs;

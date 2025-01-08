@@ -1,0 +1,25 @@
+:root {
+    /* variables */
+    --include-purple: #3c257e;
+    --primary: var(--include-purple);
+    --secondary: #e7c6f9;
+    --light-background: rgb(241, 240, 240);
+    --dark-background: #0d303b;
+    --text-dark: #0d303b;
+    --text-light: #def6ff;
+    
+    /* spacers */
+    --tiny-spacer: 8px;
+    --small-spacer: 16px;
+    --spacer: 24px;
+    --medium-spacer: 48px;
+    --large-spacer: 80px;
+    
+    /* border radius */
+    --b-radius: 8px;
+
+    /* navbar */
+    --navbar-height: 80px;
+
+    background-color: var(--light-background);
+}

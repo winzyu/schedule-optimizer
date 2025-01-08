@@ -3,11 +3,8 @@ import prisma from '../_prisma/client.js';
 export default class Users {
   // CREATE
   static async create({ input }) {
-    const { name } = input;
     const user = await prisma.user.create({
-      data: {
-        name,
-      },
+      data: input
     });
     return user;
   }
@@ -15,30 +12,22 @@ export default class Users {
   // READ
   static async find({ id }) {
     return prisma.user.findUnique({
-      where: {
-        id,
-      },
+      where: { id }
     });
   }
 
-  static async findMany({ ids }) {
-    return prisma.user.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-      },
+  static async findByEmail({ email }) {
+    return prisma.user.findUnique({
+      where: { email }
     });
   }
 
-  // UDPATE
+  // UPDATE
   static async update({ id, input }) {
     try {
       const user = await prisma.user.update({
-        where: {
-          id,
-        },
-        data: input,
+        where: { id },
+        data: input
       });
       return user;
     } catch (e) {
@@ -50,9 +39,7 @@ export default class Users {
   static async delete({ id }) {
     try {
       await prisma.user.delete({
-        where: {
-          id,
-        },
+        where: { id }
       });
       return true;
     } catch (e) {
@@ -60,12 +47,21 @@ export default class Users {
     }
   }
 
-  // OTHER
-  static async getPlaylists({ id }) {
-    return prisma.playlist.findMany({
-      where: {
-        userId: id,
-      },
+  // RELATIONSHIPS
+  static async getSchedules({ id }) {
+    return prisma.schedule.findMany({
+      where: { userId: id },
+      include: {
+        courses: {
+          include: {
+            course: {
+              include: {
+                meetings: true
+              }
+            }
+          }
+        }
+      }
     });
   }
 }

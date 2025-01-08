@@ -1,0 +1,132 @@
+// app/(pages)/courses/_components/CourseSearch/CourseSearch.module.scss
+
+.container {
+  width: 100%;
+}
+
+.searchBox {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  max-width: 36rem;
+}
+
+.input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+}
+
+.courseGrid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.courseCard {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.courseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.courseTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.units {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.courseName {
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.instructor {
+  color: #4b5563;
+  margin-bottom: 1rem;
+}
+
+.meetingInfo {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.meetingType {
+  font-weight: 500;
+}
+
+.seatsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.seatInfo {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+
+  &.open {
+    background: #f0fdf4;
+    .count { color: #15803d; }
+    .label { color: #166534; }
+  }
+
+  &.reserved {
+    background: #fefce8;
+    .count { color: #854d0e; }
+    .label { color: #713f12; }
+  }
+
+  &.waitlist {
+    background: #fef2f2;
+    .count { color: #991b1b; }
+    .label { color: #7f1d1d; }
+  }
+}
+
+.count {
+  font-weight: 600;
+}
+
+.loading {
+  color: #4b5563;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error {
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}

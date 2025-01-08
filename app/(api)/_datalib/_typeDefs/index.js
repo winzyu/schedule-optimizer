@@ -1,16 +1,18 @@
 import { mergeTypeDefs } from '@graphql-tools/merge';
-
+import scalars from './scalars.js';
 import User from './User.js';
-import Playlist from './Playlist.js';
-import Song from './Song.js';
+import Course from './Course.js';
+import Meeting from './Meeting.js';
+import Schedule from './Schedule.js';
 
-const allTypeDefs = [];
+const types = [
+  scalars,
+  User,
+  Course,
+  Meeting,
+  Schedule
+];
 
-const modules = [User, Playlist, Song];
-modules.forEach((module) => {
-  allTypeDefs.push(module);
-});
-
-const typeDefs = mergeTypeDefs(allTypeDefs);
+const typeDefs = mergeTypeDefs(types);
 
 export default typeDefs;
