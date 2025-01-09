@@ -20,16 +20,18 @@
       }
     ],
     "paths": {
-    "@globals/*": ["./app/(pages)/_globals/*"],
-    "@components/*": ["./app/(pages)/_components/*"],
-    "@data/*": ["./app/(pages)/_data/*"],
-    "@hooks/*": ["./app/(pages)/_hooks/*"],
-    "@contexts/*": ["./app/(pages)/_contexts/*"],
-    "@utils/*": ["./app/(pages)/_utils/*"],   
-    "@actions/*": ["./app/(api)/_actions/*"],
-    "@datalib/*": ["./app/(api)/_datalib/*"],
+      "@/*": ["./app/*"],
+      "@components/*": ["./app/components/*"],
+      "@lib/*": ["./app/lib/*"],
+      "@styles/*": ["./app/styles/*"],
+      "@routes/*": ["./app/(routes)/*"],
+      "@api/*": ["./app/api/*"],
+      "@services/*": ["./app/lib/services/*"],
+      "@graphql/*": ["./app/lib/graphql/*"],
+      "@auth/*": ["./app/lib/auth/*"],
+      "@actions/*": ["./app/lib/actions/*"]
     }
   },
-  "include": ["nextEnv.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
