@@ -6,8 +6,10 @@ const typeDefs = gql`
     id: ID!
     email: String!
     name: String!
+    password: String!
     createdAt: DateTime!
     updatedAt: DateTime!
+    schedules: [Schedule!]!
   }
 
   input CreateUserInput {

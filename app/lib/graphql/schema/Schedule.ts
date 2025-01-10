@@ -9,6 +9,7 @@ const typeDefs = gql`
     updatedAt: DateTime!
     courses: [Course!]!
     userId: String!
+    user: User!
   }
 
   input CreateScheduleInput {

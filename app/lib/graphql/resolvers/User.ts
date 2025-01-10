@@ -32,6 +32,21 @@ const resolvers = {
       });
     },
   },
+  // Add field resolver for schedules
+  User: {
+    schedules: async (parent, _, { prisma }) => {
+      return prisma.schedule.findMany({
+        where: { userId: parent.id },
+        include: {
+          courses: {
+            include: {
+              course: true,
+            },
+          },
+        },
+      });
+    },
+  },
 };
 
 export default resolvers;
