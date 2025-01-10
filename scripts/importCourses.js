@@ -15,7 +15,7 @@ async function importCourses() {
     await prisma.course.deleteMany();
     console.log('Cleared existing data');
 
-    const coursesPath = path.join(__dirname, '../app/(api)/_data/courses.json');
+    const coursesPath = path.join(__dirname, '../data/courses.json');
     const subjectData = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
     const allCourses = Object.values(subjectData).flat();
 

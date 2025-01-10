@@ -7,5 +7,5 @@ model Meeting {
 
   // Relationship to Course
   courseId    String
-  course      Course   @relation(fields: [courseId], references: [id])
+  course      Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
