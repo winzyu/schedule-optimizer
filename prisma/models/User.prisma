@@ -1,11 +1,13 @@
+// prisma/models/User.prisma
 model User {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  name          String
-  password      String     // In practice, this should be hashed
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  
-  // Relationship with schedules
-  schedules     Schedule[]
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String // In practice, this should be hashed
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  schedules    Schedule[]
+  savedCourses SavedCourses?
 }

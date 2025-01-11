@@ -1,0 +1,6 @@
+// prisma/models/SavedCourses.prisma
+model SavedCourses {
+  userId  String   @id
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courses Course[] @relation("SavedCourses")
+}

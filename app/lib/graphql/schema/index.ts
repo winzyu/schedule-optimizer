@@ -4,6 +4,7 @@ import courseTypeDefs from './Course';
 import meetingTypeDefs from './Meeting';
 import scheduleTypeDefs from './Schedule';
 import userTypeDefs from './User';
+import savedCoursesTypeDefs from './SavedCourses';
 import scalarTypeDefs from './scalars';
 
 const types = [
@@ -11,6 +12,7 @@ const types = [
   courseTypeDefs,
   meetingTypeDefs,
   scheduleTypeDefs,
+  savedCoursesTypeDefs,
   userTypeDefs,
 ];
 const typeDefs = mergeTypeDefs(types);

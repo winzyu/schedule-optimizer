@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// prisma/models/Course.prisma
 model Course {
   id           String    @id @default(uuid())
   crn          String
@@ -29,6 +30,7 @@ model Course {
   // Relationships
   meetings  Meeting[]
   schedules ScheduleToCourse[]
+  savedBy   SavedCourses[]     @relation("SavedCourses")
 }
 
 model Meeting {
@@ -41,6 +43,13 @@ model Meeting {
   // Relationship to Course
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+// prisma/models/SavedCourses.prisma
+model SavedCourses {
+  userId  String   @id
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courses Course[] @relation("SavedCourses")
 }
 
 model Schedule {
@@ -69,6 +78,7 @@ model ScheduleToCourse {
   @@id([scheduleId, courseId])
 }
 
+// prisma/models/User.prisma
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -77,6 +87,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relationship with schedules
-  schedules Schedule[]
+  // Relationships
+  schedules    Schedule[]
+  savedCourses SavedCourses?
 }
