@@ -1,3 +1,4 @@
+// components/ScheduleBuilder/CreateScheduleDialog.tsx
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -21,7 +22,7 @@ interface CreateScheduleDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   userId: string;
-  onScheduleCreated?: () => void;
+  onScheduleCreated: (schedule: any) => void;
 }
 
 const CreateScheduleDialog = ({ 
@@ -37,7 +38,7 @@ const CreateScheduleDialog = ({
     e.preventDefault();
     
     try {
-      await createSchedule({
+      const result = await createSchedule({
         variables: {
           input: {
             name: scheduleName,
@@ -48,8 +49,8 @@ const CreateScheduleDialog = ({
       });
       
       setScheduleName('');
-      onOpenChange(false);
-      onScheduleCreated?.();
+      // Pass the newly created schedule back to the parent
+      onScheduleCreated(result.data.createSchedule);
     } catch (error) {
       console.error('Error creating schedule:', error);
     }
