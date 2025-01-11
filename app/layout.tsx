@@ -17,9 +17,7 @@ export default function RootLayout({
         <ApolloProvider client={apolloClient}>
           <div className="min-h-screen bg-gray-50">
             <Navigation />
-            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-              {children}
-            </main>
+            <main className="max-w-[1400px] mx-auto py-6 px-6">{children}</main>
           </div>
         </ApolloProvider>
       </body>
