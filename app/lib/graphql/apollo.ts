@@ -1,5 +1,28 @@
-// app/lib/graphql/apollo.ts
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  from,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = createHttpLink({
+  uri: '/api/graphql',
+});
+
+// Auth link to include the token in requests
+const authLink = setContext((_, { headers }) => {
+  // Get token from localStorage
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    }
+  };
+});
 
 const cache = new InMemoryCache({
   typePolicies: {
@@ -9,7 +32,6 @@ const cache = new InMemoryCache({
           merge(existing = [], incoming) {
             return incoming; // For search results, we want to replace not merge
           },
-          // Add keyArgs to properly cache different search queries
           keyArgs: ['search', ['subjectCode', 'courseNumber']],
         },
       },
@@ -28,7 +50,7 @@ const cache = new InMemoryCache({
 });
 
 export const apolloClient = new ApolloClient({
-  uri: '/api/graphql',
+  link: from([authLink, httpLink]),
   cache,
   defaultOptions: {
     watchQuery: {

@@ -1,8 +1,9 @@
 import React from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import ScheduleCalendar from '@/components/Calendar/ScheduleCalendar';
-import { TEST_USER_ID } from '@/lib/constants';
+import { useAuth } from '@/lib/contexts/AuthContext';
 
 const GET_SAVED_SCHEDULES = gql`
   query GetSchedules($userId: String!) {
@@ -39,11 +40,21 @@ const DELETE_SCHEDULE = gql`
 `;
 
 const SavedSchedules = () => {
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+
   const { loading, error, data, refetch } = useQuery(GET_SAVED_SCHEDULES, {
-    variables: { userId: TEST_USER_ID },
+    variables: { userId: user?.id },
+    skip: !user?.id,
   });
 
   const [deleteSchedule] = useMutation(DELETE_SCHEDULE);
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
 
   const handleDeleteSchedule = async (scheduleId: string) => {
     if (window.confirm('Are you sure you want to delete this schedule?')) {
@@ -57,6 +68,10 @@ const SavedSchedules = () => {
       }
     }
   };
+
+  if (!isAuthenticated) {
+    return null; // Component will redirect in useEffect
+  }
 
   if (loading) {
     return (

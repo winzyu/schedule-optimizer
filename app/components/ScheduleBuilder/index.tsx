@@ -5,12 +5,17 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import Link from 'next/link';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useAuth } from '@/lib/contexts/AuthContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { MainContent } from './MainContent';
 import CreateScheduleDialog from './CreateScheduleDialog';
 import SavedCoursesPanel from './SavedCoursesPanel';
 import OptimizeDialog from './OptimizeDialog';
-import { TEST_USER_ID } from '@/lib/constants';
 
 const GET_SCHEDULE = gql`
   query GetSchedule($id: ID!) {
@@ -65,10 +70,11 @@ const UPDATE_SCHEDULE = gql`
 `;
 
 const ScheduleBuilder = () => {
+  const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const scheduleId = searchParams.get('id');
-  
+
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(!scheduleId);
   const [isOptimizeDialogOpen, setIsOptimizeDialogOpen] = useState(false);
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
@@ -83,6 +89,24 @@ const ScheduleBuilder = () => {
 
   const activeSchedule = data?.schedule;
 
+  // Add auth check at the start
+  if (!user) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-xl font-semibold mb-4">Please Log In</h2>
+        <p className="text-gray-600 mb-6">
+          You need to be logged in to create and manage schedules
+        </p>
+        <Link
+          href="/login"
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Go to Login
+        </Link>
+      </div>
+    );
+  }
+
   const handleSaveSchedule = async () => {
     try {
       await updateSchedule({
@@ -91,8 +115,8 @@ const ScheduleBuilder = () => {
             id: activeSchedule.id,
             name: activeSchedule.name,
             courseIds: activeSchedule.courses.map(course => course.id)
-          }
-        }
+          },
+        },
       });
       setHasUnsavedChanges(false);
       setIsSaveDialogOpen(true);
@@ -114,8 +138,8 @@ const ScheduleBuilder = () => {
           input: {
             id: activeSchedule.id,
             courseIds: schedule.map(course => course.id)
-          }
-        }
+          },
+        },
       });
       setHasUnsavedChanges(true);
     } catch (error) {
@@ -133,9 +157,9 @@ const ScheduleBuilder = () => {
         variables: {
           input: {
             id: activeSchedule.id,
-            courseIds: updatedCourseIds
-          }
-        }
+            courseIds: updatedCourseIds,
+          },
+        },
       });
       setHasUnsavedChanges(true);
     } catch (error) {
@@ -220,7 +244,7 @@ const ScheduleBuilder = () => {
         <div className="lg:col-span-1">
           <SavedCoursesPanel
             activeSchedule={activeSchedule}
-            userId={TEST_USER_ID}
+            userId={user.id}
             onCoursesUpdated={() => setHasUnsavedChanges(true)}
           />
         </div>
@@ -240,7 +264,7 @@ const ScheduleBuilder = () => {
       <CreateScheduleDialog
         open={isCreateDialogOpen}
         onOpenChange={setIsCreateDialogOpen}
-        userId={TEST_USER_ID}
+        userId={user.id}
         onScheduleCreated={handleCreateSchedule}
       />
 

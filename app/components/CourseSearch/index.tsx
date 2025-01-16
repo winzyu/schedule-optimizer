@@ -1,7 +1,8 @@
 // app/components/CourseSearch/index.tsx
 import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { TEST_USER_ID } from '@/lib/constants';
+import Link from 'next/link';
+import { useAuth } from '@/lib/contexts/AuthContext';
 import SearchForm from './SearchForm';
 import CourseList from './CourseList';
 import CoursePreview from './CoursePreview';
@@ -78,6 +79,7 @@ const GET_SAVED_COURSES = gql`
 `;
 
 const CourseSearch = () => {
+  const { user } = useAuth();
   const [subjectCode, setSubjectCode] = useState('');
   const [courseNumber, setCourseNumber] = useState('');
   const [searchInitiated, setSearchInitiated] = useState(false);
@@ -100,20 +102,21 @@ const CourseSearch = () => {
   const { data: savedCoursesData, refetch: refetchSavedCourses } = useQuery(
     GET_SAVED_COURSES,
     {
-      variables: { userId: TEST_USER_ID },
+      variables: { userId: user?.id },
+      skip: !user?.id,
     }
   );
 
   const [saveCourse] = useMutation(SAVE_COURSE, {
     onError: (error) => {
       console.error('Mutation error:', error);
-    }
+    },
   });
 
   const [removeCourse] = useMutation(REMOVE_COURSE, {
     onError: (error) => {
       console.error('Remove course error:', error);
-    }
+    },
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -122,10 +125,15 @@ const CourseSearch = () => {
   };
 
   const handleSaveCourse = async (course) => {
+    if (!user) {
+      alert('Please log in to save courses');
+      return;
+    }
+
     try {
       await saveCourse({
         variables: {
-          userId: TEST_USER_ID,
+          userId: user?.id,
           courseId: course.id,
         },
       });
@@ -139,7 +147,7 @@ const CourseSearch = () => {
     try {
       await removeCourse({
         variables: {
-          userId: TEST_USER_ID,
+          userId: user?.id,
           courseId: course.id,
         },
       });
@@ -150,6 +158,23 @@ const CourseSearch = () => {
   };
 
   const savedCourses = savedCoursesData?.savedCourses || [];
+
+  if (!user) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-xl font-semibold mb-4">Please Log In</h2>
+        <p className="text-gray-600 mb-6">
+          You need to be logged in to save courses and create schedules
+        </p>
+        <Link
+          href="/login"
+          className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Go to Login
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -180,7 +205,7 @@ const CourseSearch = () => {
             <h2 className="text-xl font-bold mb-4">
               Saved Courses ({savedCourses.length})
             </h2>
-              <SavedCoursesList
+            <SavedCoursesList
               courses={savedCourses}
               onCourseRemove={handleRemoveCourse}
               onCoursePreview={setPreviewCourse}

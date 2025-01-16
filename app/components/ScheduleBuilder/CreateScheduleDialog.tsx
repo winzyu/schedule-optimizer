@@ -1,7 +1,12 @@
 // components/ScheduleBuilder/CreateScheduleDialog.tsx
 import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const CREATE_SCHEDULE = gql`
   mutation CreateSchedule($input: CreateScheduleInput!) {
@@ -25,31 +30,31 @@ interface CreateScheduleDialogProps {
   onScheduleCreated: (schedule: any) => void;
 }
 
-const CreateScheduleDialog = ({ 
-  open, 
-  onOpenChange, 
+const CreateScheduleDialog = ({
+  open,
+  onOpenChange,
   userId,
-  onScheduleCreated 
+  onScheduleCreated,
 }: CreateScheduleDialogProps) => {
   const [scheduleName, setScheduleName] = useState('');
   const [createSchedule, { loading }] = useMutation(CREATE_SCHEDULE);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    console.log('Creating schedule with userId:', userId); // Add this
+  
     try {
       const result = await createSchedule({
         variables: {
           input: {
             name: scheduleName,
+            courseIds: [], // Start with empty schedule
             userId: userId,
-            courseIds: [] // Start with empty schedule
-          }
-        }
+          },
+        },
       });
       
       setScheduleName('');
-      // Pass the newly created schedule back to the parent
       onScheduleCreated(result.data.createSchedule);
     } catch (error) {
       console.error('Error creating schedule:', error);
@@ -64,8 +69,8 @@ const CreateScheduleDialog = ({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label 
-              htmlFor="scheduleName" 
+            <label
+              htmlFor="scheduleName"
               className="block text-sm font-medium text-gray-700"
             >
               Schedule Name

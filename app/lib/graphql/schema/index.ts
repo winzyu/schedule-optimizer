@@ -6,8 +6,10 @@ import scheduleTypeDefs from './Schedule';
 import userTypeDefs from './User';
 import savedCoursesTypeDefs from './SavedCourses';
 import scalarTypeDefs from './scalars';
+import AuthTypeDefs from './Auth';
 
 const types = [
+  AuthTypeDefs,
   scalarTypeDefs,
   courseTypeDefs,
   meetingTypeDefs,
